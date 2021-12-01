@@ -32,6 +32,22 @@ const resolveDescription = (status) => {
     }
 }
 
+const resolveDealerHand = (status, dealerCards) => {
+    let text = "";
+    if (status == 0)
+        return `${text} ${dealerCards.slice(0, 2)}-XX`;
+    else
+        return `${text} ${dealerCards}`;
+}
+
+const resolveDealerValue = (status, dealerValue) => {
+    let text = "Value: ";
+    if (status == 0)
+        return `${text} XX`;
+    else
+        return `${text} ${dealerValue}`;
+}
+
 
 
 module.exports = {
@@ -44,9 +60,9 @@ module.exports = {
                 { name: "Your hand:", value: cards, inline: false },
                 { name: `Value: ${playerCardsValue}`, value: '\u200B', inline: false },
                 // { name: endGame ? "Result:" : "\u200B", value: endGame ? "u lost ${amount}" : "\u200B" },
-                // // { name: '\u200B', value: '\u200B' },
-                { name: "Dealer hand:", value: dealerCards, inline: false },
-                { name: `Value: ${dealerCardsValue}`, value: '\u200B', inline: false },
+                { name: '\u200B', value: '\u200B' },
+                { name: "Dealer hand:", value: resolveDealerHand(status, dealerCards), inline: false },
+                { name: resolveDealerValue(status,dealerCardsValue), value: '\u200B', inline: false },
                 { name: "Cards remaining:", value: cardsRemaining, inline: true })
             .setTimestamp()
             .setFooter("--------------------------------------------------------|");
