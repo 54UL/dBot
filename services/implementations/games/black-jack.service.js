@@ -1,6 +1,7 @@
 
 const suits = ["\u2660", "\u2665", "\u2666", "\u2663"];
 const numbers = ["A", 2, 3, 4, 5, 6, 7, 8, 9, 10, "J", "Q", "K"];
+
 const { blackJackEmbed, blackJackRow } = require('../discord-messages-templates/black-jack.embed');
 
 class Card {
@@ -162,37 +163,72 @@ class BlackJackService {
 
         await interaction.message.edit({ components: [] });
         const embed = blackJackEmbed(status, userMatch.player.getCards(), userMatch.dealer.getCards(), userMatch.deck.allCards.length.toString(), userMatch.player.values.toString(), userMatch.dealer.values.toString());
-        if (!gameOver && !isWinner) {
+        if (!gameOver && status != 1) {
             await interaction.reply({ embeds: [embed], components: [blackJackRow] });
         } else {
             await interaction.reply({ embeds: [embed] });
         }
     }
 
-    async passTurn(interaction) {
-        //Fetch user id and proced to the corresponding match
-        //Only dealers turn???
-        //TODO: REFACTOR, put this inside of a function called players turn
-        this.dealersTurn(interaction);
+
+    bjEmbedBuilder(status, userMatch) {
+        return blackJackEmbed(status, userMatch.player.getCards(), userMatch.dealer.getCards(), userMatch.deck.allCards.length.toString(), userMatch.player.values.toString(), userMatch.dealer.values.toString());
     }
 
-    dealersTurn(interaction) {
+    async passTurn(interaction) {
         const userId = interaction.user.id;
         const userMatch = this.matches.get(userId);
+        let blackJackStatus = this.dealerBlackJack(userId);
+
+        switch (blackJackStatus) {
+            case 0:
+                await this.dealersTurn(interaction, userMatch);
+                break;
+            case 1:
+                this.logger.info('dealer WON with blackjack');
+                const embed1 = this.bjEmbedBuilder(2, userMatch);
+                return await interaction.reply({ embeds: [embed1] });
+                break;
+            case 2:
+                this.logger.info('dealer TIE');
+                const embed2 = this.bjEmbedBuilder(3, userMatch);
+                return await interaction.reply({ embeds: [embed2] });
+                break;
+        }
+    }
+
+    async dealersTurn(interaction, userMatch) {
         this.logger.warn("revealing..." + interaction);
+        await interaction.message.edit({ components: [] });
 
         while (userMatch.dealer.values < 17) {
             userMatch.dealer.addACard(userMatch.deck.getACard());
         }
 
-        //SOFT case
+        if (userMatch.dealer.values <= 21 && userMatch.dealer.values > userMatch.player.values) {
+            this.logger.warn("dealer won by highest number");
+            const embed = this.bjEmbedBuilder(2, userMatch);
+            return await interaction.reply({ embeds: [embed] });
+        } else if (userMatch.player.values <= 21 && userMatch.player.values > userMatch.dealer.values) {
+            this.logger.warn("player won by highest number");
+            const embed = this.bjEmbedBuilder(1, userMatch);
+            return await interaction.reply({ embeds: [embed] });
+        } else if (userMatch.player.values == userMatch.dealer.values) {
+            this.logger.warn("tie, both have same numbers");
+            const embed = this.bjEmbedBuilder(3, userMatch);
+            return await interaction.reply({ embeds: [embed] });
+        }
+
         if (userMatch.dealer.values > 21) {
             if (userMatch.dealer.aces !== 0) {
                 userMatch.dealer.values -= 10;
                 userMatch.dealer.aces -= 1;
-                dealersTurn();
+                this.dealersTurn(interaction, userMatch);
             } else {
-                // gameOver = true;
+                //checks if the dealer has something better than the player... obviously not a bj cos that case is checked above
+                this.logger.warn("dealer lost cos bust up");
+                const embed = this.bjEmbedBuilder(1, userMatch);
+                await interaction.reply({ embeds: [embed] });
             }
         }
     }
@@ -203,6 +239,20 @@ class BlackJackService {
         this.logger.info(userMatch.player);
         if (userMatch.player.bj) {
             if (userMatch.dealer.bj)
+                return 2;
+            else
+                return 1;
+        }
+        else {
+            return 0;
+        }
+    }
+
+    dealerBlackJack(userId) {
+        const userMatch = this.matches.get(userId);
+        this.logger.info(userMatch.dealer);
+        if (userMatch.dealer.bj) {
+            if (userMatch.player.bj)
                 return 2;
             else
                 return 1;

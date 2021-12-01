@@ -23,7 +23,6 @@ module.exports = {
 
         //check if we have a black jack at the begining 
         const status = blackJackService.isBlackJack(currentUserId);
-        console.log("status:"+status);
         const embed = blackJackEmbed(status, initialPlayersDeck, initialDealersDeck, initialRemainingCards, playerHandValue, dealerHandValue);
         if (status != 1) {
             await interaction.reply({ embeds: [embed], components: [blackJackRow] });

@@ -10,6 +10,8 @@ const resolveColor = (status) => {
             return "#3ba55c";// won
         case 2:
             return "#d53b3e";// lost
+        case 3:
+            return "#000000";// tie
         default:
             return "#d53b3e";
     }
@@ -23,6 +25,8 @@ const resolveDescription = (status) => {
             return "You won 😋";
         case 2:
             return "You lost 🥺";
+        case 3:
+            return "Tie 😳";
         default:
             return "NONE";
     }
