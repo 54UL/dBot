@@ -1,0 +1,2 @@
+# xexo
+discord bot
