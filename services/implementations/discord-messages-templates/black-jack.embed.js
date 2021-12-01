@@ -49,21 +49,20 @@ const resolveDealerValue = (status, dealerValue) => {
 }
 
 
-
 module.exports = {
-    blackJackEmbed: (status, cards, dealerCards, cardsRemaining, playerCardsValue, dealerCardsValue) => {
+    blackJackEmbed: (embedForm) => {
         return new MessageEmbed()
-            .setColor(resolveColor(status))
-            .setTitle("21 | ${username}")
-            .setDescription(resolveDescription(status))
+            .setColor(resolveColor(embedForm.status))
+            .setTitle(`21 | ${embedForm.userName} 😪`)
+            .setDescription(resolveDescription(embedForm.status))
             .addFields(
-                { name: "Your hand:", value: cards, inline: false },
-                { name: `Value: ${playerCardsValue}`, value: '\u200B', inline: false },
+                { name: "Your hand:", value: embedForm.cards, inline: false },
+                { name: `Value: ${embedForm.playerCardsValue}`, value: '\u200B', inline: false },
                 // { name: endGame ? "Result:" : "\u200B", value: endGame ? "u lost ${amount}" : "\u200B" },
-                { name: '\u200B', value: '\u200B' },
-                { name: "Dealer hand:", value: resolveDealerHand(status, dealerCards), inline: false },
-                { name: resolveDealerValue(status, dealerCardsValue), value: '\u200B', inline: false },
-                { name: "Cards remaining:", value: cardsRemaining, inline: true })
+                // { name: '\u200B', value: '\u200B' },
+                { name: "Dealer hand:", value: resolveDealerHand(embedForm.status, embedForm.dealerCards), inline: false },
+                { name: resolveDealerValue(embedForm.status, embedForm.dealerCardsValue), value: '\u200B', inline: false },
+                { name: `Remaining cards: ${embedForm.cardsRemaining} `, value: "\u200B", inline: true })
             .setTimestamp()
             .setFooter("--------------------------------------------------------|");
     },

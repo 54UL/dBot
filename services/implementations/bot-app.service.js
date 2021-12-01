@@ -29,7 +29,7 @@ class BotAppService {
                     return await this.commandHandlers.get(commandName).execute(interaction, this.dependency);
                 } catch (error) {
                     this.logger.fatal(`cannot execute command [${commandName}] due: ${error}`);
-                    await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
+                    await interaction.reply({ content: 'server crashed', ephemeral: true });
                 }
             } else if (interaction.isButton()) {
                 const buttonId = interaction.customId;
@@ -37,7 +37,7 @@ class BotAppService {
                     this.logger.warn("button interaction id : " + buttonId);
                     await this.buttonHandlers.get(buttonId)(interaction, this.dependency);
                 } catch (error) {
-                    this.logger.fatal(`cannot handle button interaction [${buttonId}] due: ${error}`);
+                    this.logger.fatal(`cannot handle button interaction [${buttonId}] due: ${error.stack}`);
                     await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
                 }
                 // this.buttonHandlers.delete(buttonId);//Removes the handler

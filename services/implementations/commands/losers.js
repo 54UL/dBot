@@ -2,13 +2,9 @@ const { SlashCommandBuilder } = require('@discordjs/builders');
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('trade')
-        .setDescription('exchange xexos'),
+        .setName('losers')
+        .setDescription('worst of the worst '),
     async execute(interaction,dependecy) {
-        
-
-
-
         
     }
 };
