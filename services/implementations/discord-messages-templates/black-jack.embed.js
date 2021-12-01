@@ -20,7 +20,7 @@ const resolveColor = (status) => {
 const resolveDescription = (status) => {
     switch (status) {
         case 0:
-            return "Take a card or go to hell 😡";
+            return "Grab a card or go to hell 😡";
         case 1:
             return "You won 😋";
         case 2:
@@ -35,7 +35,7 @@ const resolveDescription = (status) => {
 const resolveDealerHand = (status, dealerCards) => {
     let text = "";
     if (status == 0)
-        return `${text} ${dealerCards.slice(0, 2)}-XX`;
+        return `${text} ${dealerCards.slice(0, 2)} - XX`;
     else
         return `${text} ${dealerCards}`;
 }
@@ -62,7 +62,7 @@ module.exports = {
                 // { name: endGame ? "Result:" : "\u200B", value: endGame ? "u lost ${amount}" : "\u200B" },
                 { name: '\u200B', value: '\u200B' },
                 { name: "Dealer hand:", value: resolveDealerHand(status, dealerCards), inline: false },
-                { name: resolveDealerValue(status,dealerCardsValue), value: '\u200B', inline: false },
+                { name: resolveDealerValue(status, dealerCardsValue), value: '\u200B', inline: false },
                 { name: "Cards remaining:", value: cardsRemaining, inline: true })
             .setTimestamp()
             .setFooter("--------------------------------------------------------|");
