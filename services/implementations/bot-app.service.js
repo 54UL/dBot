@@ -33,6 +33,11 @@ class BotAppService {
                 }
             } else if (interaction.isButton()) {
                 const buttonId = interaction.customId;
+                const suspectUserId = interaction.user.id;
+                const owner = interaction.member.user.id;
+                if (suspectUserId !== owner)
+                    return await interaction.reply({ content: "don't press others buttons 😡", ephemeral: true });
+
                 try {
                     this.logger.warn("button interaction id : " + buttonId);
                     await this.buttonHandlers.get(buttonId)(interaction, this.dependency);

@@ -20,13 +20,13 @@ const resolveColor = (status) => {
 const resolveDescription = (status) => {
     switch (status) {
         case 0:
-            return "Grab a card or go to hell 😡";
+            return "Grab a card or hit 😡";
         case 1:
             return "You won 😋";
         case 2:
             return "You lost 🥺";
         case 3:
-            return "Tie 😳";
+            return "Draw 😳";
         default:
             return "NONE";
     }
@@ -52,8 +52,9 @@ const resolveDealerValue = (status, dealerValue) => {
 module.exports = {
     blackJackEmbed: (embedForm) => {
         return new MessageEmbed()
+            .setAuthor(embedForm.userName)
             .setColor(resolveColor(embedForm.status))
-            .setTitle(`21 | ${embedForm.userName} 😪`)
+            .setTitle(`black jack | bet of: 666`)
             .setDescription(resolveDescription(embedForm.status))
             .addFields(
                 { name: "Your hand:", value: embedForm.cards, inline: false },
@@ -64,17 +65,16 @@ module.exports = {
                 { name: resolveDealerValue(embedForm.status, embedForm.dealerCardsValue), value: '\u200B', inline: false },
                 { name: `Remaining cards: ${embedForm.cardsRemaining} `, value: "\u200B", inline: true })
             .setTimestamp()
-            .setFooter("--------------------------------------------------------|");
     },
     blackJackRow: new MessageActionRow()
         .addComponents(
             new MessageButton()
                 .setCustomId('take-card')
-                .setLabel('Take')
+                .setLabel('Grab')
                 .setStyle('SUCCESS'),
             new MessageButton()
                 .setCustomId('pass-card')
-                .setLabel('Pass')
+                .setLabel('Hit')
                 .setStyle('DANGER'),
         )
 }
