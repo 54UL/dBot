@@ -1,4 +1,5 @@
 const e = require("cors");
+const { Wallet } = require("./models/wallet");
 
 class BankService {
 
@@ -20,18 +21,22 @@ class BankService {
 
     }
 
-    async setBalance(userId, balance) {
-        this.bankAccounts.set(userId, balance);
+    async addBalance(userId, handBalance, bankBalance, creditBalance) {
+        let wallet = this.getWallet(userId);
+        wallet.handBalance += handBalance;
+        wallet.bankBalance += bankBalance;
+        wallet.creditBalance += creditBalance;
     }
+
     //Implementation
     async wipe(usersIds, amount) {
         usersIds.forEach(id => {
-            this.setBalance(id, amount);
+            this.bankAccounts.set(id, new Wallet(0,50000,0));
         });
         this.logger.warn("yoooo some one just wiped the economy");
     }
 
-    async getBalance(userId) {
+    getWallet(userId) {
         return this.bankAccounts.get(userId);
     }
 

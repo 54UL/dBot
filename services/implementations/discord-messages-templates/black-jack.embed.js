@@ -1,21 +1,22 @@
 const { MessageEmbed } = require("discord.js");
 const { MessageActionRow, MessageButton } = require('discord.js');
+const theme = require("./theme");
 
-
-const resolveColor = (status) => {
-    switch (status) {
+const resolveColor = (balance) => {
+    switch (balance) {
         case 0:
-            return "#5865f2"; //standard color
+            return theme.secondary;//standard color
         case 1:
-            return "#3ba55c";// won
+            return theme.primary;// won
         case 2:
-            return "#d53b3e";// lost
+            return theme.danger;// lost
         case 3:
-            return "#000000";// tie
+            return theme.black;// tie
         default:
-            return "#d53b3e";
+            return theme.danger;//something is wrong wtff
     }
 }
+
 
 const resolveDescription = (status) => {
     switch (status) {

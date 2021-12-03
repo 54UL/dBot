@@ -61,7 +61,10 @@ class BotAppService {
     addButtonHandler(buttonId, handler) {
         this.buttonHandlers.set(buttonId, handler);
     }
-
+    
+    getClient(){
+        return this.client;
+    }
     async dispose() {
 
     }
