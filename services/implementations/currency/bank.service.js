@@ -45,20 +45,29 @@ class BankService {
         const requestedWallet = this.bankAccounts.get(from.userId);
         const beneficiaryWallet = this.bankAccounts.get(to.userId);
 
-        if (requestedWallet.handBalance < amount) return;//nel
+        if (requestedWallet.handBalance < amount) return false;//nel
         
         requestedWallet.handBalance -= amount;
         beneficiaryWallet.handBalance += amount;
-        return //to chido
+        return true;//to chido
     }
 
-    async steal(userId) {
-        const robber  = this.bankAccounts.get(userId);
-        const stealProbability = Math.floor(Math.random() * 100) ;
+    async steal(userId, members) {
+        const robberWallet = this.getWallet(userId);
+        const stealProbability = Math.floor(Math.random() * 100);
+        const members = client.guilds.cache.get(process.env.GUILD_ID).members.cache;
+
         if(stealProbability >= 30){
             //get some random user to fuck with
+            const userTofuckWithIndex = Math.floor(Math.random() * members.guild.memberCount);
+            members.cache[userTofuckWithIndex];
+            const victimWallet = this.getWallet(userTofuckWithId);
+            const balanceToStole = Math.floor(Math.random() * victimWallet.handBalance);
+            await this.addBalance(userTofuckWithId,-balanceToStole,0,0);
         }else{
             // catch the robber
+            const fineBalance = Math.floor(Math.random() * 5000);
+            await this.addBalance(userId,-fineBalance,0,0);
         }
     }
 
