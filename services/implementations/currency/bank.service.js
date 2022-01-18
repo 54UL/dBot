@@ -30,18 +30,36 @@ class BankService {
 
     //Implementation
     async wipe(usersIds, amount) {
+        const wipeValue = 50000;
         usersIds.forEach(id => {
-            this.bankAccounts.set(id, new Wallet(0,50000,0));
+            this.bankAccounts.set(id, new Wallet(0, wipeValue, 0));
         });
-        this.logger.warn("yoooo some one just wiped the economy");
+        this.logger.warn("all balances wiped to:");
     }
 
     getWallet(userId) {
         return this.bankAccounts.get(userId);
     }
 
-    async trade(amount, userFromId, userToId) {
+    async trade(amount, from, to) {
+        const requestedWallet = this.bankAccounts.get(from.userId);
+        const beneficiaryWallet = this.bankAccounts.get(to.userId);
 
+        if (requestedWallet.handBalance < amount) return;//nel
+        
+        requestedWallet.handBalance -= amount;
+        beneficiaryWallet.handBalance += amount;
+        return //to chido
+    }
+
+    async steal(userId) {
+        const robber  = this.bankAccounts.get(userId);
+        const stealProbability = Math.floor(Math.random() * 100) ;
+        if(stealProbability >= 30){
+            //get some random user to fuck with
+        }else{
+            // catch the robber
+        }
     }
 
     async deposit(amount, userId) {
@@ -51,8 +69,6 @@ class BankService {
     async requestCredit(amount, userId) {
 
     }
-
-
 
 }
 

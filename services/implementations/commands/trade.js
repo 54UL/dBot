@@ -5,9 +5,9 @@ module.exports = {
         .setName('trade')
         .setDescription('exchange xexos'),
     async execute(interaction,dependecy) {
+        const bankService = dependecy.get("Bank");
+        const userId = interaction.user.id;
         
-
-
 
         
     }

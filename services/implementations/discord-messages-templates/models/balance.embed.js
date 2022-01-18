@@ -9,4 +9,4 @@ class BalanceEmbedForm {
 }
 
 
-module.exports = { BlackJackForm }
+module.exports = { BalanceEmbedForm }
