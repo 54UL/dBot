@@ -1,4 +1,3 @@
-const e = require("cors");
 const { Wallet } = require("./models/wallet");
 
 class BankService {
@@ -49,36 +48,51 @@ class BankService {
         
         requestedWallet.handBalance -= amount;
         beneficiaryWallet.handBalance += amount;
-        return true;//to chido
+        return true;
     }
 
-    async steal(userId, members) {
-        const robberWallet = this.getWallet(userId);
+    //returns true if some one successfully stole xexos
+    async steal(userId) {
         const stealProbability = Math.floor(Math.random() * 100);
-        const members = client.guilds.cache.get(process.env.GUILD_ID).members.cache;
+        // const members = client.guilds.cache.get(process.env.GUILD_ID).members.cache;
 
-        if(stealProbability >= 30){
+        if (stealProbability >= 30) {
             //get some random user to fuck with
             const userTofuckWithIndex = Math.floor(Math.random() * members.guild.memberCount);
             members.cache[userTofuckWithIndex];
             const victimWallet = this.getWallet(userTofuckWithId);
             const balanceToStole = Math.floor(Math.random() * victimWallet.handBalance);
             await this.addBalance(userTofuckWithId,-balanceToStole,0,0);
+            return true;
         }else{
             // catch the robber
             const fineBalance = Math.floor(Math.random() * 5000);
             await this.addBalance(userId,-fineBalance,0,0);
+            return false;
         }
     }
 
-    async deposit(amount, userId) {
+    async deposit(userId,amount) {
+        if (amount <= 0 ) return false;
+        const beneficiary = this.getWallet(userId);
+        const handBalance = beneficiary.handBalance;
+        if (amount >  handBalance ) return false;
+        await this.addBalance(userId, -amount, amount, 0);
+        return true;
+    }
 
+    async withdraw(userId,amount){
+        if (amount <= 0 ) return false;
+        const beneficiary = this.getWallet(userId);
+        const bankBalance = beneficiary.bankBalance;
+        if (amount >  bankBalance ) return false;
+        await this.addBalance(userId, amount, -amount, 0);
+        return true;
     }
 
     async requestCredit(amount, userId) {
-
+        //TOO COMPLEX: COMING SOON
     }
-
 }
 
 module.exports = { BankService }

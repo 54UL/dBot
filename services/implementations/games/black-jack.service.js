@@ -1,124 +1,8 @@
 
-const suits = ["\u2660", "\u2665", "\u2666", "\u2663"];
-const numbers = ["A", 2, 3, 4, 5, 6, 7, 8, 9, 10, "J", "Q", "K"];
 
 const { blackJackEmbed, blackJackRow } = require('../discord-messages-templates/black-jack.embed');
 const { BlackJackForm } = require('../discord-messages-templates/models/black-jack-form');
-
-class Card {
-    constructor(suit, number) {
-        this.suit = suits[suit];
-        this.number = numbers[number];
-        this.value = this.getPoint(number);
-    }
-
-    getSymbol() {
-        return this.suit + this.number
-    }
-
-    getPoint(number) {
-        let value = 0;
-        if (number === 0) {
-            value = 11;
-        } else if (number >= 10) {
-            value = 10;
-        } else {
-            value = number + 1;
-        }
-        return value;
-    }
-}
-
-class DeckOfCards {
-    constructor() {
-        this.allCards = [];
-
-        for (let suit = 0; suit < 4; suit++) {
-            for (let number = 0; number < 13; number++) {
-                let card = new Card(suit, number);
-                this.allCards.push(card);
-            }
-        }
-
-        let temp = [];
-        while (this.allCards.length > 0) {
-            let randomNum = Math.floor(Math.random() * this.allCards.length);
-            temp.push(this.allCards[randomNum]);
-            this.allCards.splice(randomNum, 1);
-        }
-        this.allCards = temp;
-    }
-
-    getACard() {
-        return this.allCards.shift();
-    }
-}
-
-class Person {
-    constructor() {
-        this.cards = [];
-        this.values = 0;
-        this.numOfCards = 0;
-        this.aces = 0;
-        this.faces = 0;
-        this.bj = false;
-    }
-
-    addACard(card) {
-        this.cards.push(card);
-        this.numOfCards += 1;
-        this.values += this.addPoint(card);
-        this.aces += this.haveAce(card.number);
-        this.faces += this.haveFace(card.value);
-        this.bj = this.isBJ();
-    }
-
-    getCards() {
-        return this.cards.map(card => card.getSymbol()).join(' - ');
-    }
-
-    handValue() {
-        return this.values;
-    }
-
-    addPoint(card) {
-        if (card.number === "A" && this.aces > 1) {
-            return 1;
-        } else {
-            return card.value;
-        }
-    }
-
-    haveAce(number) {
-        if (number === "A") {
-            return 1;
-        }
-        return 0;
-    }
-
-    haveFace(value) {
-        if (value === 10) {
-            return 1;
-        }
-        return 0;
-    }
-
-    isBJ() {
-        if (this.values === 21)
-            return this.aces === 1 && this.faces === 1;
-        else
-            return false;
-    }
-}
-
-class BlackJackMatch {
-    constructor() {
-        this.player = new Person();
-        this.dealer = new Person();
-        this.players = []; //for the future
-        this.deck = new DeckOfCards();
-    }
-}
+const { BlackJackMatch } = require("./models/BlackJackMatch");
 
 class BlackJackService {
     constructor() {
@@ -128,6 +12,7 @@ class BlackJackService {
     async init(dependency) {
         this.logger = dependency.get("Logger");
         this.botApp = dependency.get("BotApp");
+        this.bank = dependency.get("Bank");
 
         this.botApp.addButtonHandler('take-card', this.nextTurn.bind(this));
         this.botApp.addButtonHandler('pass-card', this.passTurn.bind(this));
@@ -135,15 +20,26 @@ class BlackJackService {
         this.logger.info("Black jack service ready");
     }
 
-    startGame(userId) {
+    startGame(userId,amount) {
         var createdMatch = new BlackJackMatch(userId);
         //Initial game scramble
         createdMatch.player.addACard(createdMatch.deck.getACard());
         createdMatch.dealer.addACard(createdMatch.deck.getACard());
         createdMatch.player.addACard(createdMatch.deck.getACard());
         createdMatch.dealer.addACard(createdMatch.deck.getACard());
-
+        this.takeBet(userId,amount);
         this.matches.set(userId, createdMatch);
+    }
+
+    //Currency logic
+    async takeBet(userId, amount) {
+        this.matchBet = amount;
+        await this.bank.addBalance(userId, -amount, 0, 0);
+    }
+
+    async giveReward(userId,tie) {
+        const rewardAmount = tie ? this.matchBet : this.matchBet * 2;
+        await this.bank.addBalance(userId, rewardAmount, 0, 0);
     }
 
     bjEmbedBuilder(status, userName, userMatch) {
@@ -172,8 +68,10 @@ class BlackJackService {
         if (gameOver)
             status = 2;
 
-        if (blackJackStatus == 1 || userMatch.player.bj)
+        if (blackJackStatus == 1 || userMatch.player.bj) {
             status = 1;
+            this.giveReward(userId, false);
+        }
 
         await interaction.message.edit({ components: [] });
 
@@ -184,9 +82,6 @@ class BlackJackService {
             await interaction.reply({ embeds: [embed] });
         }
     }
-
-
-
 
     async passTurn(interaction) {
         const userId = interaction.user.id;
@@ -204,6 +99,7 @@ class BlackJackService {
                 return await interaction.reply({ embeds: [embed1] });
             case 2:
                 this.logger.info('dealer TIE');
+                this.giveReward(userId,true);
                 const embed2 = this.bjEmbedBuilder(3, userName, userMatch);
                 return await interaction.reply({ embeds: [embed2] });
         }
@@ -211,9 +107,9 @@ class BlackJackService {
 
     async dealersTurn(interaction, userMatch) {
         const userName = interaction.user.username;
+        const userId = interaction.user.id;
 
-        if (!this.isPlaying(interaction.user.id)) return; //u trying to press 
-
+        if (!this.isPlaying(userId)) return;
 
         this.logger.warn("revealing..." + interaction);
         await interaction.message.edit({ components: [] });
@@ -228,10 +124,12 @@ class BlackJackService {
             return await interaction.reply({ embeds: [embed] });
         } else if (userMatch.player.values <= 21 && userMatch.player.values > userMatch.dealer.values) {
             this.logger.warn("player won by highest number");
+            this.giveReward(userId, false);
             const embed = this.bjEmbedBuilder(1, userName, userMatch);
             return await interaction.reply({ embeds: [embed] });
         } else if (userMatch.player.values == userMatch.dealer.values || userMatch.player.bj && userMatch.player.bj) {
             this.logger.warn("tie, both have same numbers");
+            this.giveReward(userId, true);
             const embed = this.bjEmbedBuilder(3, userName, userMatch);
             return await interaction.reply({ embeds: [embed] });
         }
@@ -245,6 +143,7 @@ class BlackJackService {
                 //checks if the dealer has something better than the player... obviously not a bj cos that case is checked above
                 this.logger.warn("dealer lost cos bust up");
                 const embed = this.bjEmbedBuilder(1, userName, userMatch);
+                this.giveReward(userId,false);
                 await interaction.reply({ embeds: [embed] });
             }
         }
