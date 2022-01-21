@@ -21,8 +21,8 @@ module.exports = {
             .setDescription("bank of xexos")
             .addFields(
                 { name: "Bank", value: wallet.bankBalance.toString(), inline: false },
-                { name: "Credit card", value: wallet.creditBalance.toString(), inline: false },
                 { name: "In your hand", value: wallet.handBalance.toString(), inline: false },
+                { name: "Credit card", value: wallet.creditBalance.toString(), inline: false },
                 { name: '\u200B', value: '\u200B' },
                 { name: `NetWorth: ${resolveNetWorth(wallet)}`, value: "\u200B", inline: false },
             )

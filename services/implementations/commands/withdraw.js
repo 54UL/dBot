@@ -15,9 +15,7 @@ module.exports = {
 
         if (await bankService.withdraw(userId, amountOption.value))
             return await interaction.reply({ content: `Successfully took ${amountOption.value}`, ephemeral: false });
-
         else
             return await interaction.reply({ content: `No enough balance`, ephemeral: true });
-
     }
 };
