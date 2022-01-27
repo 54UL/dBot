@@ -50,7 +50,7 @@ const resolveDealerValue = (status, dealerValue) => {
 }
 
 const resolveTitle = (status, betAmount) => {
-    switch (status) {
+    switch (status.status) {
         case 0:
             return `black jack | bet of: ${betAmount}`;
         case 1:
@@ -69,7 +69,7 @@ module.exports = {
         return new MessageEmbed()
             .setAuthor(embedForm.userName)
             .setColor(resolveColor(embedForm.status))
-            .setTitle(resolveTitle(embedForm.status, embedForm.betAmount))
+            .setTitle(resolveTitle(embedForm, embedForm.betAmount))
             .setDescription(resolveDescription(embedForm.status))
             .addFields(
                 { name: "Your hand:", value: embedForm.cards, inline: false },

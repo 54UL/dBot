@@ -14,7 +14,7 @@ module.exports = {
         if (interaction.options.data.length <= 0) return await interaction.reply({ content: 'cannot start bj: no amount option provided', ephemeral: true });
         const amountOption = interaction.options.data[0];
         if (amountOption.type !== "NUMBER") return await interaction.reply({ content: 'not an number fool', ephemeral: true });
-        if (amountOption.value <= MIN_BET_VALUE) return await interaction.reply({ content: 'min amount: 500 :xexo:', ephemeral: true });
+        if (amountOption.value < MIN_BET_VALUE) return await interaction.reply({ content: `min amount: ${MIN_BET_VALUE} :xexo:`, ephemeral: true });
 
         //TODO:REFACTOR ABOVE...
         const blackJackService = dependecy.get("BlackJack");
