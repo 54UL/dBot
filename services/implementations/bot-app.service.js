@@ -6,7 +6,10 @@ class BotAppService {
     constructor() {
         // Create a new client instance
         this.buttonHandlers = new Map();
-        this.client = new Client({ intents: [Intents.FLAGS.GUILDS] });
+        // let intents = new Intents();
+        // intents.add('GUILDS');
+        // intents.add('GUILD_MEMBERS');
+        this.client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MEMBERS] });
     }
 
     async init(dependency) {

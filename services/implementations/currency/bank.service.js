@@ -44,12 +44,10 @@ class BankService {
         return this.bankAccounts.get(userId);
     }
 
-    async trade(amount, from, to) {
-        const requestedWallet = this.bankAccounts.get(from.userId);
-        const beneficiaryWallet = this.bankAccounts.get(to.userId);
-
-        if (requestedWallet.handBalance < amount) return false;//nel
-
+    async trade(amount, userFrom, userTo) {
+        const requestedWallet = this.bankAccounts.get(userFrom.id);
+        const beneficiaryWallet = this.bankAccounts.get(userTo.id);
+        if (requestedWallet.handBalance <= amount) return false;//nel
         requestedWallet.handBalance -= amount;
         beneficiaryWallet.handBalance += amount;
         return true;
@@ -80,7 +78,7 @@ class BankService {
         if (amount <= 0) return false;
         const beneficiary = this.getWallet(userId);
         const handBalance = beneficiary.handBalance;
-        if (amount > handBalance) return false;
+        if (amount >= handBalance) return false;
         await this.addBalance(userId, -amount, amount, 0);
         return true;
     }
@@ -89,7 +87,7 @@ class BankService {
         if (amount <= 0) return false;
         const beneficiary = this.getWallet(userId);
         const bankBalance = beneficiary.bankBalance;
-        if (amount > bankBalance) return false;
+        if (amount >= bankBalance) return false;
         await this.addBalance(userId, amount, -amount, 0);
         return true;
     }

@@ -12,9 +12,8 @@ module.exports = {
         //Get all users from the guild
         // const userIds = new interaction.guild.members.holds();
         const client = app.getClient();
-        const members = client.guilds.cache.get(process.env.GUILD_ID).members.cache;
-
-        const userIds = members.map(element => {
+        const members = await client.guilds.cache.get(process.env.GUILD_ID).members;
+        const userIds = members.cache.map(element => {
             logger.warn(`user [${element.user.username}] balance wiped`);
             return element.user.id;
         });

@@ -15,8 +15,8 @@ module.exports = {
         const amountOption = interaction.options.data[0];
         if (amountOption.type !== "NUMBER") return await interaction.reply({ content: 'not an number fool', ephemeral: true });
         if (amountOption.value <= MIN_BET_VALUE) return await interaction.reply({ content: 'min amount: 500 :xexo:', ephemeral: true });
-        //TODO:REFACTOR ABOVE...
 
+        //TODO:REFACTOR ABOVE...
         const blackJackService = dependecy.get("BlackJack");
         const bank = dependecy.get("Bank");
         const currentUserId = interaction.user.id;
@@ -33,7 +33,17 @@ module.exports = {
         const dealerHandValue = blackJackService.getDealerHandValue(currentUserId);
         //check if we have a black jack at the begining 
         const status = blackJackService.isBlackJack(currentUserId);
-        const embedForm = new BlackJackForm(status, userName, initialPlayersDeck, initialDealersDeck, initialRemainingCards, playerHandValue, dealerHandValue);
+
+        const embedForm = new BlackJackForm(
+                status,
+                userName,
+                initialPlayersDeck,
+                initialDealersDeck,
+                initialRemainingCards,
+                playerHandValue,
+                dealerHandValue,
+                amountOption.value);
+
         const embed = blackJackEmbed(embedForm);
     
         if (status != 1) {

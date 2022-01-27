@@ -49,13 +49,27 @@ const resolveDealerValue = (status, dealerValue) => {
         return `${text} ${dealerValue}`;
 }
 
+const resolveTitle = (status, betAmount) => {
+    switch (status) {
+        case 0:
+            return `black jack | bet of: ${betAmount}`;
+        case 1:
+            return `you won ${(betAmount * 2).toString()}!!😳`;
+        case 2:
+            return `you lost ${betAmount.toString()} 😔😔😔`;
+        case 3:
+            return "";
+        default:
+            return "wtf?";
+    }
+}
 
 module.exports = {
     blackJackEmbed: (embedForm) => {
         return new MessageEmbed()
             .setAuthor(embedForm.userName)
             .setColor(resolveColor(embedForm.status))
-            .setTitle(`black jack | bet of: 666`)
+            .setTitle(resolveTitle(embedForm.status, embedForm.betAmount))
             .setDescription(resolveDescription(embedForm.status))
             .addFields(
                 { name: "Your hand:", value: embedForm.cards, inline: false },
