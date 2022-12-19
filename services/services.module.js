@@ -4,11 +4,13 @@ const { BotAppService } = require("./implementations/bot-app.service");
 const { BankService } = require("./implementations/currency/bank.service");
 const { BlackJackService } = require("./implementations/games/black-jack.service");
 const { BootstrapService } = require("./implementations/bootstrap.service.service");
+const { VerificationService } = require("./implementations/verification.service");
 
 module.exports = [
     DiscordService,
     CommandDeployer,
     BotAppService,
+    VerificationService,
     BankService,
     BlackJackService,
     BootstrapService
