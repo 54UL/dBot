@@ -23,8 +23,6 @@ class VerificationService
         
         this.botApp.addButtonHandler('start-verification', this.startVerification.bind(this));
         this.discordClient = this.botApp.getClient();
-        
-     
     }
 
     async publishVerificationAdvice(interaction)
