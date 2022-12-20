@@ -10,9 +10,9 @@ module.exports = [
     DiscordService,
     CommandDeployer,
     BotAppService,
-    VerificationService,
     BankService,
     BlackJackService,
+    VerificationService,
     BootstrapService
 ]
 

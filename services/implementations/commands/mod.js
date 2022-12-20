@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const { replyEmbed, replyEmbedComponents: components } = require('../discord-messages-templates/reply.embed');
+const { replyEmbed, replyEmbedComponents } = require('../discord-messages-templates/reply.embed');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -7,12 +7,14 @@ module.exports = {
         .setDescription('request validation'),
     async execute(interaction, dependecy) 
     {
-        // const bankService = dependecy.get("Bank");
-        // const userName = interaction.user.username;
-        const userId = interaction.user.id;
+        const verification = dependecy.get("Verification");
+        await verification.publishVerificationAdvice(interaction);
         // const wallet = bankService.getWallet(userId);
 
-        const embed = replyEmbed({});
-        await interaction.reply({ embeds: [embed], components: [components] });
+         const embed = replyEmbed({});
+        //await interaction.reply({});
+        return await interaction.reply({ content: `Verify posted in current channel (you only can see this)`, ephemeral: true });
+
+        //await interaction.reply({ embeds: [embed], components: [replyEmbedComponents] });
     }
 };

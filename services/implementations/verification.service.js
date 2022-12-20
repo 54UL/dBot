@@ -23,10 +23,13 @@ class VerificationService
         
         this.botApp.addButtonHandler('start-verification', this.startVerification.bind(this));
         this.discordClient = this.botApp.getClient();
+        
+     
+    }
 
-        const channel =  this.discordClient.channels.cache.find(channel => channel.name === "nth-testing");// deshardcodear esto lol
-
-        channel.send({ embeds: [replyEmbed({})], components: [replyEmbedComponents] })
+    async publishVerificationAdvice(interaction)
+    {
+        interaction.channel.send({ embeds: [replyEmbed({})], components: [replyEmbedComponents] })
     }
 
     async startVerification(interaction)
@@ -34,6 +37,7 @@ class VerificationService
         try 
         {
             interaction.member.user.send({ embeds: [verificationStartedEmbed({})], components: [verificationStartedEmbedComponents] });
+            //interaction.reply({content:"si dime mas..."});
         } 
         catch (error) 
         {
