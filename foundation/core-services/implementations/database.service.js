@@ -7,6 +7,7 @@ class DataBaseService {
 
     async init(dependency) {
         this.logger = dependency.get("Logger");
+        this.start();
     }
 
     async dispose() {
@@ -18,6 +19,7 @@ class DataBaseService {
     }
 
     start() {
+        //TODO: MOVE THIS TO PROPPER IMPL
         try {
             mongoose.connect(process.env.DB_CNN, {
                 useNewUrlParser: true,
@@ -26,8 +28,7 @@ class DataBaseService {
 
             this.logger.info(`DB Online on: ${process.env.DB_CNN}`);
         } catch (error) {
-            this.logger.fatal('Ha ocurrido un problema a la DB', error);
-            throw new Error('Error en la base de datos');
+            this.logger.fatal('DB CONNECTION ERROR:'+error);
         }
     }
 
