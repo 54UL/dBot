@@ -11,9 +11,9 @@ module.exports = {
         await verification.publishVerificationAdvice(interaction);
         // const wallet = bankService.getWallet(userId);
 
-         const embed = replyEmbed({});
+        const embed = replyEmbed({});
         //await interaction.reply({});
-        return await interaction.reply({ content: `Verify posted in current channel (you only can see this)`, ephemeral: true });
+        return await interaction.reply({ content: `Verify posted in current channel`, ephemeral: true });
 
         //await interaction.reply({ embeds: [embed], components: [replyEmbedComponents] });
     }

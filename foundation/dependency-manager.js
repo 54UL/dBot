@@ -24,7 +24,7 @@ class DepedencyManager {
         const logger = this.get("Logger");
         this.startHooks.forEach((meta) => {
             meta.hook(this);
-            logger.info(`Service ${meta.serviceName} has been initialized...`);
+            logger.warn(`Service [[${meta.serviceName}]] has been started succesfully`);
         });
     }
 

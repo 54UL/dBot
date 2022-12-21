@@ -50,6 +50,7 @@ class BankService {
         if (requestedWallet.handBalance <= amount) return false;//nel
         requestedWallet.handBalance -= amount;
         beneficiaryWallet.handBalance += amount;
+
         return true;
     }
 
@@ -65,11 +66,13 @@ class BankService {
             const balanceToStole = Math.floor(Math.random() * victimWallet.handBalance);
             await this.addBalance(victimUser.user.id, -balanceToStole, 0, 0);
             await this.addBalance(userId, balanceToStole, 0, 0);
+
             return new StealResult(balanceToStole, victimName);
         } else {
             // catch the robber
             const fineBalance = Math.floor(Math.random() * 5000);
             await this.addBalance(userId, -fineBalance, 0);
+
             return new StealResult(fineBalance, "himself, lmao 💩");
         }
     }
@@ -80,6 +83,7 @@ class BankService {
         const handBalance = beneficiary.handBalance;
         if (amount >= handBalance) return false;
         await this.addBalance(userId, -amount, amount, 0);
+
         return true;
     }
 
@@ -89,6 +93,7 @@ class BankService {
         const bankBalance = beneficiary.bankBalance;
         if (amount >= bankBalance) return false;
         await this.addBalance(userId, amount, -amount, 0);
+        
         return true;
     }
 

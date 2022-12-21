@@ -9,7 +9,6 @@ module.exports = [
     // DataBaseService,
     LoggerService,
     RestService,
-    // KafkaService,
     ControllerService,
 ]
 

@@ -1,4 +1,3 @@
-const mongoose = require('mongoose');
 
 class DataBaseService {
 
@@ -8,7 +7,6 @@ class DataBaseService {
 
     async init(dependency) {
         this.logger = dependency.get("Logger");
-        this.connect();
     }
 
     async dispose() {
@@ -19,8 +17,7 @@ class DataBaseService {
 
     }
 
-    //Implementation
-    connect() {
+    start() {
         try {
             mongoose.connect(process.env.DB_CNN, {
                 useNewUrlParser: true,
@@ -32,6 +29,14 @@ class DataBaseService {
             this.logger.fatal('Ha ocurrido un problema a la DB', error);
             throw new Error('Error en la base de datos');
         }
+    }
+
+    stop() {
+
+    }
+
+    getEngine(engineName) {
+
     }
 }
 
