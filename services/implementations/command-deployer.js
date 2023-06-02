@@ -18,7 +18,7 @@ class CommandDeployer {
         if (process.env.RUN_COMMAND_DEPLOYER == "true") {
             await this.Deploy();
         } else {
-            this.logger.warn("starting bot without deploying commands....");
+            this.logger.warn("Starting bot without deploying commands....");
         }
     }
    
@@ -38,7 +38,8 @@ class CommandDeployer {
         }
     }
 
-    async dispose() {
+    async dispose() 
+    {
 
     }
 

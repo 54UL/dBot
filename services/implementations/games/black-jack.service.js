@@ -16,8 +16,6 @@ class BlackJackService {
 
         this.botApp.addButtonHandler('take-card', this.nextTurn.bind(this));
         this.botApp.addButtonHandler('pass-card', this.passTurn.bind(this));
-
-        this.logger.info("Black jack service ready");
     }
 
     startGame(userId,amount) {

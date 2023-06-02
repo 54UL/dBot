@@ -80,7 +80,7 @@ class RestService {
                 this.logger.fatal("Ocurrió un problema con el servidor", err);
                 throw new Error(err)
             };
-            this.logger.info(` Server run in port: ${process.env.PORT}`);
+            this.logger.info(`Server runing in port: ${process.env.PORT}`);
         });
     }
 }

@@ -12,6 +12,7 @@ module.exports = {
         const members = client.guilds.cache.get(process.env.GUILD_ID).members.cache;
         const userName = interaction.user.username;
         const stealResult = await bankService.steal(userId, members);
+        
         return await interaction.reply({ content: `${userName} stole ${stealResult.currencyUsed} from ${ stealResult.victim }`, ephemeral: false });
     }
 };

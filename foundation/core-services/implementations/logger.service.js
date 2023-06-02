@@ -5,10 +5,10 @@ class LoggerService {
 
     constructor() {
         log4js.configure({
-            appenders: { out: { type: 'stdout' }, cheese: { type: "file", filename: "app.log" } },
-            categories: { default: { appenders: ["cheese", "out"], level: "debug" } } // level: "error"
+            appenders: { out: { type: 'stdout' }, dBot: { type: "file", filename: "logs/dBot.log" } },
+            categories: { default: { appenders: ["dBot", "out"], level: "debug" } } // level: "error"
         });
-        this.logger = log4js.getLogger("cheese");
+        this.logger = log4js.getLogger("dBot");
     }
 
     async init(dependency) {
@@ -24,19 +24,20 @@ class LoggerService {
 
     //Implementation
     async info(message) {
-        this.logger.info(message);
+       
+        this.logger.info(message.toUpperCase());
     }
 
     async warn(message) {
-        this.logger.warn(message);
+        this.logger.warn(message.toUpperCase());
     }
 
     async error(message) {
-        this.logger.error(message);
+        this.logger.error(message.toUpperCase());
     }
 
     async fatal(message) {
-        this.logger.fatal(message);
+        this.logger.fatal(message.toUpperCase());
     }
 }
 
