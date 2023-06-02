@@ -2,21 +2,21 @@
 basic discord bot infrastructure implementing:
 - Currency system (bot currency)
 - Games
-- And more..
+- And more...
 
 # Running and deploy
 1) Create an discord app and cofigure the app as you wish.
-2) Configure you .env file in root proyect root with the propper values using this template
+2) Configure you .env file in the proyect root with the propper values using this template
 
     ```bash
-        #dBot env
-        #GENERIC CONFIG
-        PORT=5411
-        #DISCORD
-        RUN_COMMAND_DEPLOYER=true
-        CLIENT_ID=<YOUR_CLIENT_ID>
-        GUILD_ID=<YOUR_DISCORD_SERVER_ID>
-        BOT_TOKEN=<YOUR_BOT_TOKEN>
+    #dBot env
+    #GENERIC CONFIG
+    PORT=5411
+    #DISCORD
+    RUN_COMMAND_DEPLOYER=true
+    CLIENT_ID=<YOUR_CLIENT_ID>
+    GUILD_ID=<YOUR_DISCORD_SERVER_ID>
+    BOT_TOKEN=<YOUR_BOT_TOKEN>
     ```
 
 [-] Make sure you have `RUN_COMMAND_DEPLOYER=bool` set it to true when creating new commands or to update existing commands.
@@ -48,17 +48,14 @@ basic discord bot infrastructure implementing:
     ```
 
 # Roadmap
-## v 0.1 alfa
+## v0.1-ALFA
 * Built-in services
     - Logger
     - REST Client
     - Database connectors
         - MongoDB (WIP)
-        - SQL (NOT IMPLEMENTED)
 * Embbeds and theme utils
 * Ticket and verification system (WIP)
 * Currency system
 * Games
     - Black jack
-
-
