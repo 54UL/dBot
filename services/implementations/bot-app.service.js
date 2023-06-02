@@ -70,13 +70,13 @@ class BotAppService {
     }
 
     onReady() {
-        this.logger.info("discord client ready :3");
+        this.logger.info("Discord bot ready =＾● ⋏ ●＾=");
     }
 
     onError(error)
     {
         //Errors thrown within this event do not have a catch handler, it is recommended to not use async functions as error event handlers. See the 
-        this.logger.fatal(`discord client error: ${guild}`);
+        this.logger.fatal(`Discord client error: ${guild}`);
     }
 
     onServerJoin(guild) {

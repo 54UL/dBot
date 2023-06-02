@@ -5,10 +5,10 @@ class LoggerService {
 
     constructor() {
         log4js.configure({
-            appenders: { out: { type: 'stdout' }, XEXO: { type: "file", filename: "app.log" } },
-            categories: { default: { appenders: ["XEXO", "out"], level: "debug" } } // level: "error"
+            appenders: { out: { type: 'stdout' }, dBot: { type: "file", filename: "logs/dBot.log" } },
+            categories: { default: { appenders: ["dBot", "out"], level: "debug" } } // level: "error"
         });
-        this.logger = log4js.getLogger("XEXO");
+        this.logger = log4js.getLogger("dBot");
     }
 
     async init(dependency) {

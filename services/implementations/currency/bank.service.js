@@ -89,11 +89,13 @@ class BankService {
 
     async withdraw(userId, amount) {
         if (amount <= 0) return false;
+        
         const beneficiary = this.getWallet(userId);
         const bankBalance = beneficiary.bankBalance;
+
         if (amount >= bankBalance) return false;
-        await this.addBalance(userId, amount, -amount, 0);
         
+        await this.addBalance(userId, amount, -amount, 0);
         return true;
     }
 
